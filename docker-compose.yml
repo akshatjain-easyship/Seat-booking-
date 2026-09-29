@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  office-booking-app:
+    build: .
+    container_name: office-desk-booking
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_PATH=/app/office_booking.db
+    volumes:
+      - ./data:/app/data
+    restart: always

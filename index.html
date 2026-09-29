@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Desk & Chair Booking System</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --surface-desk: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --border-color: #334155;
+            --border-light: rgba(255, 255, 255, 0.1);
+
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.3);
+
+            --available: #10b981;
+            --available-hover: #059669;
+            --available-glow: rgba(16, 185, 129, 0.4);
+
+            --booked: #ef4444;
+            --booked-bg: rgba(239, 68, 68, 0.15);
+            --booked-border: rgba(239, 68, 68, 0.4);
+
+            --selected: #f59e0b;
+            --selected-glow: rgba(245, 158, 11, 0.5);
+
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .wrapper {
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 1.25rem 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.15rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-muted);
+        }
+
+        /* Server Status Badge */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 1.25rem;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-icon.total {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+        }
+
+        .stat-icon.available {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .stat-icon.booked {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .stat-icon.rate {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        .stat-info .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+        }
+
+        .stat-info .stat-value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 0.2rem;
+        }
+
+        /* Date Section Banner */
+        .date-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.25rem 1.75rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .date-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .date-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .date-section-title i {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .advance-badge {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            color: #818cf8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .date-picker-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .date-nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .date-nav-btn:hover:not(:disabled) {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .date-nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .top-date-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-date-input-wrap i {
+            position: absolute;
+            left: 0.85rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        .top-date-input {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid var(--primary);
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.925rem;
+            padding: 0.55rem 0.85rem 0.55rem 2.5rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .top-date-input:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .date-info-pill {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 0.45rem 0.85rem;
+            border-radius: 10px;
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-info-pill strong {
+            color: var(--text-main);
+        }
+
+        /* 30-Day Quick Date Strip Carousel */
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            gap: 0.4rem;
+        }
+
+        .carousel-scroll-btn {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 32px;
+            height: 58px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-scroll-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .date-carousel {
+            display: flex;
+            gap: 0.6rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 0.4rem 0.2rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+            width: 100%;
+        }
+
+        .date-carousel::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .date-carousel::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .date-card-pill {
+            flex: 0 0 auto;
+            min-width: 82px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.55rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .date-card-pill:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .date-card-pill.active {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            border-color: #818cf8;
+            color: #fff;
+            box-shadow: 0 4px 14px var(--primary-glow);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .date-card-pill .pill-day {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+        }
+
+        .date-card-pill.active .pill-day {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .date-card-pill .pill-date {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 0.15rem 0;
+            color: var(--text-main);
+        }
+
+        .date-card-pill.active .pill-date {
+            color: #fff;
+        }
+
+        .date-card-pill .pill-rel {
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            border-radius: 4px;
+            padding: 0.1rem 0.35rem;
+            display: inline-block;
+        }
+
+        .date-card-pill.active .pill-rel {
+            background: rgba(255, 255, 255, 0.22);
+            color: #fff;
+        }
+
+        /* Active Booking Tabs */
+        .booking-tabs {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 0.85rem;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .booking-tab-btn {
+            flex: 1;
+            padding: 0.4rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .booking-tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 2px 8px var(--primary-glow);
+        }
+
+        .booking-date-tag {
+            font-size: 0.7rem;
+            color: #818cf8;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.15rem;
+        }
+
+        /* Shift Selection Grid */
+        .shift-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.15rem;
+            padding-top: 1.15rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .shift-card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shift-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .shift-card.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(79, 70, 229, 0.15));
+            border: 1.5px solid var(--primary);
+            box-shadow: 0 4px 16px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        .shift-card.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .shift-card-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .shift-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .shift-icon.apac {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        .shift-icon.eu {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .shift-icon.night {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+        }
+
+        .shift-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .shift-tag-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.05rem 0.35rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+        }
+
+        .shift-time {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .shift-count-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .shift-card.active .shift-count-badge {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            color: #fff;
+        }
+
+        .booking-shift-tag {
+            font-size: 0.7rem;
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.15rem;
+        }
+
+        /* Hand-Drawn Sketch Architectural Layout Map Styles */
+        .office-sketch-map {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
+            margin-top: 1rem;
+        }
+
+        .map-top-entry {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 1rem;
+        }
+
+        .entry-door-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 0.4rem 1.1rem;
+            border-radius: 8px 8px 0 0;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+            transform: rotate(-3deg);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .map-middle-section {
+            display: grid;
+            grid-template-columns: 100px 1fr 220px;
+            gap: 1.25rem;
+            align-items: stretch;
+        }
+
+        .left-corridor-wall {
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 0.85rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .wall-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .corridor-item {
+            font-size: 0.725rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .corridor-item i {
+            font-size: 1.1rem;
+            color: #818cf8;
+        }
+
+        .workstation-core {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .desk-row {
+            display: grid;
+            grid-template-columns: 1fr 90px 1fr;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .table-cluster-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .table-cluster-box:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .table-label-tag {
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .center-pole-pillar {
+            background: linear-gradient(135deg, #334155, #1e293b);
+            border: 2.5px solid #64748b;
+            border-radius: 12px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            color: #f8fafc;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 0, 0, 0.6);
+            user-select: none;
+        }
+
+        .center-pole-pillar i {
+            font-size: 1.2rem;
+            color: #fbbf24;
+        }
+
+        .center-passageway {
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            font-weight: 600;
+            gap: 0.3rem;
+            opacity: 0.5;
+        }
+
+        .right-rooms-wing {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .sketch-room {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.15rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex: 1;
+            transition: all 0.25s ease;
+        }
+
+        .sketch-room:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(30, 41, 59, 0.85);
+            transform: translateY(-2px);
+        }
+
+        .room-header-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .room-icon-graphic {
+            font-size: 0.725rem;
+            color: var(--text-muted);
+            margin-top: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .hr-room {
+            border-top: 4px solid #818cf8;
+        }
+
+        .meeting-room {
+            border-top: 4px solid #60a5fa;
+        }
+
+        .map-bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            padding-left: 100px;
+        }
+
+        .meeting-room-2 {
+            border-left: 4px solid #34d399;
+        }
+
+        .old-sales-room {
+            border-left: 4px solid #fbbf24;
+        }
+
+
+
+
+        /* Main Container Layout */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 2rem;
+        }
+
+        /* Floorplan Layout */
+        .floorplan {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 1.75rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floorplan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .floorplan-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot.available {
+            background: var(--available);
+            box-shadow: 0 0 8px var(--available-glow);
+        }
+
+        .dot.booked {
+            background: var(--booked);
+        }
+
+        .dot.selected {
+            background: var(--selected);
+            box-shadow: 0 0 8px var(--selected-glow);
+        }
+
+        /* Desk Grid */
+        .desk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .desk-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .desk-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .desk-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .desk-title {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .desk-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .desk-surface {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .row-chairs {
+            display: flex;
+            justify-content: space-around;
+            gap: 0.5rem;
+        }
+
+        /* Chair Component */
+        .chair-wrapper {
+            position: relative;
+        }
+
+        .chair {
+            width: 52px;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            outline: none;
+        }
+
+        .chair i {
+            font-size: 0.9rem;
+        }
+
+        .chair.available {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+
+        .chair.available:hover {
+            background: var(--available);
+            color: #fff;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 16px var(--available-glow);
+        }
+
+        .chair.booked {
+            background: var(--booked-bg);
+            border-color: var(--booked-border);
+            color: #f87171;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .chair.selected {
+            background: var(--selected);
+            border-color: #d97706;
+            color: #000;
+            transform: translateY(-2px) scale(1.06);
+            box-shadow: 0 0 16px var(--selected-glow);
+            animation: pulse-select 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-select {
+            0% {
+                box-shadow: 0 0 8px var(--selected-glow);
+            }
+
+            100% {
+                box-shadow: 0 0 20px var(--selected-glow);
+            }
+        }
+
+        /* Tooltip for Occupied Chair */
+        .chair-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .chair-wrapper:hover .chair-tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Sidebar Panels */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 0.85rem;
+            padding-left: 2.5rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .form-control[readonly] {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--selected);
+            font-weight: 700;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Active Bookings List */
+        .booking-search {
+            margin-bottom: 1rem;
+        }
+
+        .booking-search .form-control {
+            padding-left: 2.2rem;
+            font-size: 0.825rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .booking-search i {
+            left: 0.75rem;
+        }
+
+        .booking-list {
+            list-style: none;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .booking-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .booking-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 0.6rem;
+            transition: all 0.2s ease;
+        }
+
+        .booking-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .booking-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #fff;
+        }
+
+        .booking-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking-seat {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .booking-user {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .btn-cancel {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-cancel:hover {
+            background: var(--booked);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            opacity: 0.5;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            color: var(--text-main);
+            padding: 0.85rem 1.25rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .toast.success {
+            border-left-color: var(--available);
+        }
+
+        .toast.error {
+            border-left-color: var(--booked);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .desk-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 1rem 0.75rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Header Navigation -->
+        <header class="header">
+            <div class="header-title">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-chair"></i>
+                </div>
+                <div>
+                    <h1>Workspace Seat Reservation <span class="status-pill"><i class="fa-solid fa-server"></i> API
+                            Connected</span></h1>
+                    <p>Enterprise Desk & Chair Allocation System</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="todayBtn">
+                    <i class="fa-solid fa-calendar-day"></i> Today
+                </button>
+                <button class="btn-secondary" id="demoDataBtn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Load Sample Data
+                </button>
+            </div>
+        </header>
+
+        <!-- Date Selection & 30-Day Future Location Booking Section -->
+        <section class="date-section">
+            <div class="date-section-header">
+                <div class="date-section-title">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <div>
+                        <span style="font-size: 1.1rem; font-weight: 700; display: block;">Select Location Booking
+                            Date</span>
+                        <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 400;">Book desks for
+                            today or any future date up to 30 days in advance</span>
+                    </div>
+                </div>
+                <div class="date-picker-controls">
+                    <span class="advance-badge"><i class="fa-solid fa-clock-rotate-left"></i> 30-Day Max Window</span>
+                    <button type="button" class="date-nav-btn" id="prevDayBtn" title="Previous Day">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="top-date-input-wrap">
+                        <i class="fa-solid fa-calendar"></i>
+                        <input type="date" id="topDateInput" class="top-date-input">
+                    </div>
+                    <button type="button" class="date-nav-btn" id="nextDayBtn" title="Next Day">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick 30-Day Carousel Strip -->
+            <div class="carousel-wrapper">
+                <button type="button" class="carousel-scroll-btn" id="scrollLeftBtn" title="Scroll left">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+                <div class="date-carousel" id="dateCarousel"></div>
+                <button type="button" class="carousel-scroll-btn" id="scrollRightBtn" title="Scroll right">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+
+            <div
+                style="margin-top: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div class="date-info-pill">
+                    <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i>
+                    <span>Showing availability for: <strong id="selectedDateHuman">Today</strong> (<strong
+                            id="selectedShiftHuman" style="color: #fbbf24;">APAC Shift</strong>)</span>
+                </div>
+                <div class="date-info-pill">
+                    <i class="fa-solid fa-hourglass-half" style="color: var(--available);"></i>
+                    <span id="relativeDateBadge">Today</span>
+                </div>
+            </div>
+
+            <!-- Shift Selector Grid -->
+            <div class="shift-grid">
+                <div class="shift-card active" id="shiftCard-APAC" onclick="selectShift('APAC')">
+                    <div class="shift-card-info">
+                        <div class="shift-icon apac"><i class="fa-solid fa-sun"></i></div>
+                        <div>
+                            <div class="shift-title">APAC Shift <span class="shift-tag-badge">6 AM - 3 PM</span></div>
+                            <div class="shift-time">Morning • 06:00 to 15:00</div>
+                        </div>
+                    </div>
+                    <div class="shift-count-badge" id="shiftBadge-APAC">0 Booked</div>
+                </div>
+
+                <div class="shift-card" id="shiftCard-EU" onclick="selectShift('EU')">
+                    <div class="shift-card-info">
+                        <div class="shift-icon eu"><i class="fa-solid fa-cloud-sun"></i></div>
+                        <div>
+                            <div class="shift-title">EU Shift <span class="shift-tag-badge">1 PM - 10 PM</span></div>
+                            <div class="shift-time">Afternoon • 13:00 to 22:00</div>
+                        </div>
+                    </div>
+                    <div class="shift-count-badge" id="shiftBadge-EU">0 Booked</div>
+                </div>
+
+                <div class="shift-card" id="shiftCard-NIGHT" onclick="selectShift('NIGHT')">
+                    <div class="shift-card-info">
+                        <div class="shift-icon night"><i class="fa-solid fa-moon"></i></div>
+                        <div>
+                            <div class="shift-title">Night Shift <span class="shift-tag-badge">10 PM - 7 AM</span></div>
+                            <div class="shift-time">Overnight • 22:00 to 07:00</div>
+                        </div>
+                    </div>
+                    <div class="shift-count-badge" id="shiftBadge-NIGHT">0 Booked</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stat Dashboard Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fa-solid fa-cubes"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label">Total Capacity</div>
+                    <div class="stat-value" id="statTotal">24 Seats</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon available">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label" id="statAvailableLabel">Available Seats</div>
+                    <div class="stat-value" id="statAvailable">24</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon booked">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label" id="statBookedLabel">Occupied Seats</div>
+                    <div class="stat-value" id="statBooked">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon rate">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label">Occupancy Rate</div>
+                    <div class="stat-value" id="statRate">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="container">
+            <!-- Visual Floorplan Area -->
+            <main class="floorplan">
+                <div class="floorplan-header">
+                    <div class="floorplan-title">
+                        <i class="fa-solid fa-map-location-dot"></i> Architectural Office Floor Plan Layout
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item"><span class="dot available"></span> Available</div>
+                        <div class="legend-item"><span class="dot selected"></span> Selected</div>
+                        <div class="legend-item"><span class="dot booked"></span> Occupied</div>
+                    </div>
+                </div>
+
+                <!-- Hand-Drawn Sketch Architectural Layout Map Container -->
+                <div class="office-sketch-map">
+                    <!-- Top Entry Door -->
+                    <div class="map-top-entry">
+                        <div class="entry-door-badge">
+                            <i class="fa-solid fa-door-open"></i> Entry Door
+                            <span class="door-arrow">↘</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Middle Body: Left Wall, Workstations & Pole, Right Wing Rooms -->
+                    <div class="map-middle-section">
+                        <!-- Left Corridor / Wall -->
+                        <div class="left-corridor-wall">
+                            <div class="wall-title"><i class="fa-solid fa-building-user"></i> Side Wall</div>
+                            <div class="corridor-item"><i class="fa-solid fa-mug-hot"></i> Pantry</div>
+                            <div class="corridor-item"><i class="fa-solid fa-restroom"></i> Washrooms</div>
+                            <div class="corridor-item"><i class="fa-solid fa-box-archive"></i> Utility</div>
+                        </div>
+
+                        <!-- Workstation Core (Table 4, Table 1, Pole, Table 3, Table 2) -->
+                        <div class="workstation-core">
+                            <!-- Upper Cluster Row: Table 4 (Left), Pole (Center), Table 1 (Right) -->
+                            <div class="desk-row top-desk-row">
+                                <div class="table-cluster-box">
+                                    <div class="table-label-tag"><i class="fa-solid fa-desktop"
+                                            style="color: var(--primary);"></i> Table 4</div>
+                                    <div id="deskGrid-4"></div>
+                                </div>
+
+                                <div class="center-pole-pillar">
+                                    <i class="fa-solid fa-cube"></i>
+                                    <span>POLE</span>
+                                </div>
+
+                                <div class="table-cluster-box">
+                                    <div class="table-label-tag"><i class="fa-solid fa-desktop"
+                                            style="color: var(--primary);"></i> Table 1</div>
+                                    <div id="deskGrid-1"></div>
+                                </div>
+                            </div>
+
+                            <!-- Lower Cluster Row: Table 3 (Left), Passageway, Table 2 (Right) -->
+                            <div class="desk-row bottom-desk-row">
+                                <div class="table-cluster-box">
+                                    <div class="table-label-tag"><i class="fa-solid fa-desktop"
+                                            style="color: var(--primary);"></i> Table 3</div>
+                                    <div id="deskGrid-3"></div>
+                                </div>
+
+                                <div class="center-passageway">
+                                    <i class="fa-solid fa-person-walking"></i>
+                                    <span>Aisle</span>
+                                </div>
+
+                                <div class="table-cluster-box">
+                                    <div class="table-label-tag"><i class="fa-solid fa-desktop"
+                                            style="color: var(--primary);"></i> Table 2</div>
+                                    <div id="deskGrid-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Wing Rooms: HR Room (Top) & Meeting Room (Bottom) -->
+                        <div class="right-rooms-wing">
+                            <div class="sketch-room hr-room">
+                                <div class="room-header-title"><i class="fa-solid fa-user-tie"></i> HR Room</div>
+                                <div class="room-icon-graphic"><i class="fa-solid fa-user-shield"></i> Private Executive
+                                    Office</div>
+                            </div>
+
+                            <div class="sketch-room meeting-room">
+                                <div class="room-header-title"><i class="fa-solid fa-people-roof"></i> Meeting Room
+                                </div>
+                                <div class="room-icon-graphic"><i class="fa-solid fa-display"></i> Main Conf. Room</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Rooms Section: Meeting Room 2 & Old Sales Room -->
+                    <div class="map-bottom-section">
+                        <div class="sketch-room meeting-room-2">
+                            <div class="room-header-title"><i class="fa-solid fa-handshake"></i> Meeting Room 2</div>
+                            <div class="room-icon-graphic"><i class="fa-solid fa-users-rectangle"></i> Discussion Room
+                            </div>
+                        </div>
+
+                        <div class="sketch-room old-sales-room">
+                            <div class="room-header-title"><i class="fa-solid fa-chart-line"></i> Old Sales Room</div>
+                            <div class="room-icon-graphic"><i class="fa-solid fa-headset"></i> Sales Operations Hub
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Booking & Sidebar Controls -->
+            <aside class="sidebar">
+                <!-- Reservation Form -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <span>Reserve a Seat</span>
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="bookingDate">Reservation Date</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-calendar"></i>
+                                <input type="date" id="bookingDate" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookingShift">Work Shift</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-clock"></i>
+                                <select id="bookingShift" class="form-control"
+                                    style="cursor: pointer; appearance: auto; padding-right: 0.85rem;">
+                                    <option value="APAC">☀️ APAC Shift (6:00 AM - 3:00 PM)</option>
+                                    <option value="EU">🌤️ EU Shift (1:00 PM - 10:00 PM)</option>
+                                    <option value="NIGHT">🌙 Night Shift (10:00 PM - 7:00 AM)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">Employee Name</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="userName" class="form-control" placeholder="e.g. John Doe"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">Employee Email</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="userEmail" class="form-control"
+                                    placeholder="e.g. john@company.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectedSeatDisplay">Selected Chair</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-chair"></i>
+                                <input type="text" id="selectedSeatDisplay" class="form-control" value="None" readonly>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa-solid fa-check-circle"></i> Confirm Booking
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Active Bookings Panel -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <span>Active Bookings</span>
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div class="booking-tabs">
+                        <button type="button" class="booking-tab-btn active" id="tabSelectedDate"
+                            onclick="switchBookingTab('selected')">Selected Date</button>
+                        <button type="button" class="booking-tab-btn" id="tabAllUpcoming"
+                            onclick="switchBookingTab('all')">All Upcoming (30 Days)</button>
+                    </div>
+
+                    <div class="booking-search input-with-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchBookings" class="form-control"
+                            placeholder="Search by name or seat...">
+                    </div>
+
+                    <ul class="booking-list" id="bookingList"></ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const TOTAL_DESKS = 4;
+        const SEATS_PER_SIDE = 3;
+        const MAX_ADVANCE_DAYS = 30;
+
+        const SHIFT_META = {
+            APAC: { code: 'APAC', name: 'APAC Shift', time: '6:00 AM - 3:00 PM', icon: 'fa-sun', color: '#fbbf24' },
+            EU: { code: 'EU', name: 'EU Shift', time: '1:00 PM - 10:00 PM', icon: 'fa-cloud-sun', color: '#60a5fa' },
+            NIGHT: { code: 'NIGHT', name: 'Night Shift', time: '10:00 PM - 7:00 AM', icon: 'fa-moon', color: '#c084fc' }
+        };
+
+        let selectedSeatId = null;
+        let selectedShift = 'APAC';
+        let activeDateSeatsData = []; // From backend GET /api/seats/status?date=...&shift=...
+        let activeBookingTab = 'selected'; // 'selected' or 'all'
+
+        // Date Utilities
+        function getFormattedDate(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getTodayStr() {
+            return getFormattedDate(new Date());
+        }
+
+        function getMaxDateStr(days = MAX_ADVANCE_DAYS) {
+            const maxD = new Date();
+            maxD.setDate(maxD.getDate() + days);
+            return getFormattedDate(maxD);
+        }
+
+        function getDaysDifference(targetDateStr) {
+            const todayParts = getTodayStr().split('-');
+            const today = new Date(todayParts[0], todayParts[1] - 1, todayParts[2]);
+
+            const targetParts = targetDateStr.split('-');
+            const target = new Date(targetParts[0], targetParts[1] - 1, targetParts[2]);
+
+            const diffTime = target - today;
+            return Math.round(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function formatHumanDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        const minDateStr = getTodayStr();
+        const maxDateStr = getMaxDateStr(MAX_ADVANCE_DAYS);
+
+        const topDateInput = document.getElementById('topDateInput');
+        const formDateInput = document.getElementById('bookingDate');
+        const formShiftSelect = document.getElementById('bookingShift');
+
+        topDateInput.min = minDateStr;
+        topDateInput.max = maxDateStr;
+        topDateInput.value = minDateStr;
+
+        formDateInput.min = minDateStr;
+        formDateInput.max = maxDateStr;
+        formDateInput.value = minDateStr;
+
+        // Event Listeners for Date & Shift Inputs
+        topDateInput.addEventListener('change', (e) => setTargetDate(e.target.value));
+        formDateInput.addEventListener('change', (e) => setTargetDate(e.target.value));
+        formShiftSelect.addEventListener('change', (e) => selectShift(e.target.value));
+
+        document.getElementById('prevDayBtn').addEventListener('click', () => navigateDate(-1));
+        document.getElementById('nextDayBtn').addEventListener('click', () => navigateDate(1));
+        document.getElementById('todayBtn').addEventListener('click', () => {
+            setTargetDate(minDateStr);
+            showToast('Set location booking date to Today', 'success');
+        });
+
+        document.getElementById('scrollLeftBtn').addEventListener('click', () => scrollCarousel(-250));
+        document.getElementById('scrollRightBtn').addEventListener('click', () => scrollCarousel(250));
+        document.getElementById('searchBookings').addEventListener('input', renderBookingList);
+        document.getElementById('demoDataBtn').addEventListener('click', loadSampleData);
+
+        function build30DayCarousel() {
+            const carousel = document.getElementById('dateCarousel');
+            carousel.innerHTML = '';
+
+            const todayObj = new Date();
+            const activeDate = topDateInput.value;
+
+            for (let i = 0; i <= MAX_ADVANCE_DAYS; i++) {
+                const d = new Date(todayObj);
+                d.setDate(todayObj.getDate() + i);
+                const dateStr = getFormattedDate(d);
+
+                const pill = document.createElement('div');
+                pill.className = `date-card-pill ${dateStr === activeDate ? 'active' : ''}`;
+                pill.id = `pill-${dateStr}`;
+
+                const dayName = i === 0 ? 'TODAY' : d.toLocaleDateString('en-US', { weekday: 'short' });
+                const dateDisplay = `${d.getDate()} ${d.toLocaleDateString('en-US', { month: 'short' })}`;
+                const relDisplay = i === 0 ? 'Today' : (i === 1 ? 'Tomorrow' : `+${i}d`);
+
+                pill.innerHTML = `
+                <div class="pill-day">${dayName}</div>
+                <div class="pill-date">${dateDisplay}</div>
+                <div class="pill-rel">${relDisplay}</div>
+            `;
+
+                pill.addEventListener('click', () => setTargetDate(dateStr));
+                carousel.appendChild(pill);
+            }
+        }
+
+        function scrollCarousel(offset) {
+            document.getElementById('dateCarousel').scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
+        function navigateDate(dayOffset) {
+            const currentDate = topDateInput.value;
+            const parts = currentDate.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            d.setDate(d.getDate() + dayOffset);
+
+            const newDateStr = getFormattedDate(d);
+            if (newDateStr >= minDateStr && newDateStr <= maxDateStr) {
+                setTargetDate(newDateStr);
+            }
+        }
+
+        function setTargetDate(targetDateStr) {
+            if (!targetDateStr) return;
+
+            // Validation against 30-day window
+            if (targetDateStr < minDateStr) {
+                showToast(`Cannot book for past dates. Setting to Today (${minDateStr})`, 'error');
+                targetDateStr = minDateStr;
+            } else if (targetDateStr > maxDateStr) {
+                showToast(`Bookings allowed up to 30 days in advance (Max: ${maxDateStr})`, 'error');
+                targetDateStr = maxDateStr;
+            }
+
+            topDateInput.value = targetDateStr;
+            formDateInput.value = targetDateStr;
+            selectedSeatId = null;
+            document.getElementById('selectedSeatDisplay').value = 'None';
+
+            updateDateUI(targetDateStr);
+            fetchSeatsAndRender();
+        }
+
+        function selectShift(shiftCode) {
+            if (!SHIFT_META[shiftCode]) return;
+            selectedShift = shiftCode;
+
+            // Sync Top Cards
+            document.querySelectorAll('.shift-card').forEach(card => card.classList.remove('active'));
+            const activeCard = document.getElementById(`shiftCard-${shiftCode}`);
+            if (activeCard) activeCard.classList.add('active');
+
+            // Sync Form Select
+            formShiftSelect.value = shiftCode;
+
+            // Sync Display Text
+            const meta = SHIFT_META[shiftCode];
+            const el = document.getElementById('selectedShiftHuman');
+            if (el) {
+                el.innerText = `${meta.name} (${meta.time})`;
+                el.style.color = meta.color;
+            }
+
+            selectedSeatId = null;
+            document.getElementById('selectedSeatDisplay').value = 'None';
+            fetchSeatsAndRender();
+        }
+
+        function updateDateUI(dateStr) {
+            const diffDays = getDaysDifference(dateStr);
+            const humanStr = formatHumanDate(dateStr);
+            document.getElementById('selectedDateHuman').innerText = humanStr;
+
+            let badgeText = 'Today';
+            if (diffDays === 1) badgeText = 'Tomorrow (1 day ahead)';
+            else if (diffDays > 1) badgeText = `In ${diffDays} days (${diffDays}/30 days ahead)`;
+            document.getElementById('relativeDateBadge').innerText = badgeText;
+
+            // Nav Buttons state
+            document.getElementById('prevDayBtn').disabled = (dateStr === minDateStr);
+            document.getElementById('nextDayBtn').disabled = (dateStr === maxDateStr);
+
+            // Highlight Carousel Pill
+            document.querySelectorAll('.date-card-pill').forEach(pill => pill.classList.remove('active'));
+            const activePill = document.getElementById(`pill-${dateStr}`);
+            if (activePill) {
+                activePill.classList.add('active');
+                activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+
+            // Labels
+            document.getElementById('statAvailableLabel').innerText = `Available (${dateStr})`;
+            document.getElementById('statBookedLabel').innerText = `Occupied (${dateStr})`;
+        }
+
+        async function fetchSeatsAndRender() {
+            const currentDate = topDateInput.value;
+            try {
+                const response = await fetch(`/api/seats/status?date=${currentDate}&shift=${selectedShift}`);
+                if (!response.ok) throw new Error('API server unavailable');
+                const data = await response.json();
+                activeDateSeatsData = data.seats || [];
+
+                // Update Shift Summary Counts
+                if (data.shift_summary) {
+                    Object.keys(data.shift_summary).forEach(code => {
+                        const badge = document.getElementById(`shiftBadge-${code}`);
+                        if (badge) badge.innerText = `${data.shift_summary[code]} Booked`;
+                    });
+                }
+
+                renderFloorplanFromData();
+            } catch (err) {
+                console.warn('Error fetching seat status:', err);
+                showToast('Unable to reach server for seat availability', 'error');
+            }
+        }
+
+        function renderFloorplanFromData() {
+            const seatMap = {};
+            let bookedCount = 0;
+
+            activeDateSeatsData.forEach(s => {
+                seatMap[s.seat_id] = s;
+                if (s.status === 'booked') bookedCount++;
+            });
+
+            // Populate Table 1, Table 2, Table 3, Table 4 according to hand-drawn sketch layout
+            [1, 2, 3, 4].forEach(d => {
+                const container = document.getElementById(`deskGrid-${d}`);
+                if (!container) return;
+                container.innerHTML = '';
+
+                // Side A (North)
+                const sideA = document.createElement('div');
+                sideA.className = 'row-chairs';
+                for (let s = 1; s <= SEATS_PER_SIDE; s++) {
+                    const seatId = `D${d}-A${s}`;
+                    sideA.appendChild(createChairButton(seatId, seatMap[seatId]));
+                }
+                container.appendChild(sideA);
+
+                // Desk Surface
+                const surface = document.createElement('div');
+                surface.className = 'desk-surface';
+                surface.innerHTML = `
+                <i class="fa-solid fa-laptop"></i>
+                <span>Table ${d} Surface</span>
+                <i class="fa-solid fa-keyboard"></i>
+            `;
+                container.appendChild(surface);
+
+                // Side B (South)
+                const sideB = document.createElement('div');
+                sideB.className = 'row-chairs';
+                for (let s = 1; s <= SEATS_PER_SIDE; s++) {
+                    const seatId = `D${d}-B${s}`;
+                    sideB.appendChild(createChairButton(seatId, seatMap[seatId]));
+                }
+                container.appendChild(sideB);
+            });
+
+            updateStats(bookedCount);
+            renderBookingList();
+        }
+
+        function createChairButton(seatId, seatData) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chair-wrapper';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.id = `chair-${seatId}`;
+
+            const isBooked = seatData && seatData.status === 'booked';
+            const isSelected = seatId === selectedSeatId;
+
+            if (isBooked) {
+                btn.className = 'chair booked';
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-user-lock"></i>${seatId}`;
+
+                const shiftInfo = SHIFT_META[selectedShift];
+                const tooltip = document.createElement('div');
+                tooltip.className = 'chair-tooltip';
+                tooltip.innerHTML = `<strong>${seatId}</strong>: Occupied by ${escapeHtml(seatData.full_name)} (${shiftInfo.name}: ${shiftInfo.time})`;
+                wrapper.appendChild(tooltip);
+            } else if (isSelected) {
+                btn.className = 'chair selected';
+                btn.innerHTML = `<i class="fa-solid fa-circle-dot"></i>${seatId}`;
+            } else {
+                btn.className = 'chair available';
+                btn.innerHTML = `<i class="fa-solid fa-chair"></i>${seatId}`;
+                btn.onclick = () => selectSeat(seatId);
+            }
+
+            wrapper.appendChild(btn);
+            return wrapper;
+        }
+
+        function selectSeat(seatId) {
+            selectedSeatId = seatId;
+            document.getElementById('selectedSeatDisplay').value = seatId;
+            renderFloorplanFromData();
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('userName');
+            const emailInput = document.getElementById('userEmail');
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const date = topDateInput.value;
+
+            if (!selectedSeatId) {
+                showToast('Please select an available chair from the floor plan.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        seat_id: selectedSeatId,
+                        full_name: name,
+                        email: email,
+                        booking_date: date,
+                        shift_code: selectedShift
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    showToast(result.error || 'Failed to confirm booking.', 'error');
+                    return;
+                }
+
+                const shiftInfo = SHIFT_META[selectedShift];
+                showToast(`Reserved ${selectedSeatId} for ${name} (${shiftInfo.name}) on ${date}!`, 'success');
+
+                selectedSeatId = null;
+                document.getElementById('selectedSeatDisplay').value = 'None';
+                nameInput.value = '';
+                emailInput.value = '';
+                fetchSeatsAndRender();
+            } catch (err) {
+                showToast('Network error posting booking', 'error');
+            }
+        });
+
+        async function cancelBooking(bookingId) {
+            try {
+                const response = await fetch(`/api/bookings/${bookingId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    showToast('Failed to cancel booking', 'error');
+                    return;
+                }
+
+                showToast(`Cancelled booking successfully`, 'success');
+                fetchSeatsAndRender();
+            } catch (err) {
+                showToast('Error communicating with server', 'error');
+            }
+        }
+
+        function switchBookingTab(tab) {
+            activeBookingTab = tab;
+            document.getElementById('tabSelectedDate').classList.toggle('active', tab === 'selected');
+            document.getElementById('tabAllUpcoming').classList.toggle('active', tab === 'all');
+            renderBookingList();
+        }
+
+        function renderBookingList() {
+            const list = document.getElementById('bookingList');
+            list.innerHTML = '';
+            const searchQuery = document.getElementById('searchBookings').value.toLowerCase().trim();
+            const currentDate = topDateInput.value;
+
+            let bookedItems = activeDateSeatsData.filter(s => s.status === 'booked');
+
+            if (searchQuery) {
+                bookedItems = bookedItems.filter(s =>
+                    (s.full_name && s.full_name.toLowerCase().includes(searchQuery)) ||
+                    (s.seat_id && s.seat_id.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            if (bookedItems.length === 0) {
+                const shiftInfo = SHIFT_META[selectedShift];
+                list.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                    No active bookings for ${shiftInfo.name} on ${currentDate}.
+                </div>
+            `;
+                return;
+            }
+
+            bookedItems.forEach(b => {
+                const li = document.createElement('li');
+                li.className = 'booking-item';
+
+                const initials = (b.full_name || 'User').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                const shiftInfo = SHIFT_META[b.shift_code || selectedShift] || SHIFT_META['APAC'];
+                const dateBadge = `<span class="booking-date-tag"><i class="fa-solid fa-calendar-day"></i> ${escapeHtml(b.booking_date || currentDate)}</span>`;
+                const shiftBadge = `<span class="booking-shift-tag"><i class="fa-solid ${shiftInfo.icon}"></i> ${escapeHtml(shiftInfo.name)} (${shiftInfo.time})</span>`;
+
+                li.innerHTML = `
+                <div class="booking-info">
+                    <div class="avatar">${initials}</div>
+                    <div class="booking-details">
+                        <div class="booking-seat">
+                            <i class="fa-solid fa-chair" style="color: var(--primary);"></i> ${escapeHtml(b.seat_id)}
+                        </div>
+                        <div class="booking-user">${escapeHtml(b.full_name)}</div>
+                        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">${dateBadge}${shiftBadge}</div>
+                    </div>
+                </div>
+                <button class="btn-cancel" onclick="cancelBooking(${b.booking_id})">
+                    <i class="fa-solid fa-trash-can"></i> Cancel
+                </button>
+            `;
+                list.appendChild(li);
+            });
+        }
+
+        function updateStats(bookedCount) {
+            const totalSeats = TOTAL_DESKS * SEATS_PER_SIDE * 2; // 24
+            const availableCount = totalSeats - bookedCount;
+            const rate = Math.round((bookedCount / totalSeats) * 100);
+
+            document.getElementById('statTotal').innerText = `${totalSeats} Seats`;
+            document.getElementById('statAvailable').innerText = availableCount;
+            document.getElementById('statBooked').innerText = bookedCount;
+            document.getElementById('statRate').innerText = `${rate}%`;
+        }
+
+        async function loadSampleData() {
+            const today = new Date();
+
+            // Pick sample dates & shifts within the 30-day window
+            const sampleNames = [
+                { name: 'Sarah Connor', email: 'sarah@cyber.com', seatId: 'D1-A1', offset: 0, shift: 'APAC' },
+                { name: 'Alex Mercer', email: 'alex@proto.com', seatId: 'D1-B2', offset: 0, shift: 'APAC' },
+                { name: 'Ravi Kumar', email: 'ravi@apac.com', seatId: 'D2-A1', offset: 0, shift: 'APAC' },
+                { name: 'Helena Fischer', email: 'helena@eu.org', seatId: 'D1-A1', offset: 0, shift: 'EU' },
+                { name: 'David Chen', email: 'david@tech.org', seatId: 'D2-A3', offset: 1, shift: 'EU' },
+                { name: 'Emily Watson', email: 'emily@design.io', seatId: 'D3-B1', offset: 3, shift: 'NIGHT' },
+                { name: 'Marcus Vance', email: 'marcus@cloud.net', seatId: 'D4-A2', offset: 7, shift: 'APAC' },
+                { name: 'Sophia Martinez', email: 'sophia@future.com', seatId: 'D2-B3', offset: 14, shift: 'EU' },
+                { name: 'James Wilson', email: 'james@enterprise.com', seatId: 'D1-A2', offset: 25, shift: 'NIGHT' }
+            ];
+
+            for (const s of sampleNames) {
+                const sampleDate = new Date(today);
+                sampleDate.setDate(today.getDate() + s.offset);
+                const dateStr = getFormattedDate(sampleDate);
+
+                await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        seat_id: s.seatId,
+                        full_name: s.name,
+                        email: s.email,
+                        booking_date: dateStr,
+                        shift_code: s.shift
+                    })
+                });
+            }
+
+            showToast('Sample shift bookings generated across 30-day window!', 'success');
+            fetchSeatsAndRender();
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            return (str || '').replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Initialize Page
+        build30DayCarousel();
+        selectShift('APAC');
+        updateDateUI(minDateStr);
+        fetchSeatsAndRender();
+    </script>
+</body>
+
+</html>

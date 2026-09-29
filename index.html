@@ -1412,6 +1412,185 @@
                 text-align: center;
             }
         }
+
+        /* ===================== AUTH MODAL ===================== */
+        .auth-overlay {
+            position: fixed; inset: 0;
+            background: rgba(7, 13, 28, 0.92);
+            backdrop-filter: blur(16px);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .auth-overlay.hidden { display: none; }
+
+        .auth-box {
+            background: #1e293b;
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1);
+            animation: fadeInUp 0.35s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity:0; transform:translateY(24px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .auth-logo {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: #fff;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+        }
+        .auth-title {
+            text-align: center;
+            font-size: 1.4rem; font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 0.35rem;
+        }
+        .auth-subtitle {
+            text-align: center;
+            font-size: 0.825rem;
+            color: #94a3b8;
+            margin-bottom: 1.75rem;
+        }
+        .auth-tabs {
+            display: flex;
+            background: rgba(15,23,42,0.6);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+            gap: 4px;
+        }
+        .auth-tab {
+            flex: 1; padding: 0.5rem;
+            border: none; border-radius: 7px;
+            font-size: 0.85rem; font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+        .auth-tab.active {
+            background: #6366f1;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.4);
+        }
+        .auth-error {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.35);
+            color: #f87171;
+            padding: 0.65rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .auth-error.show { display: block; }
+
+        /* User badge in header */
+        .user-badge {
+            display: flex; align-items: center; gap: 0.6rem;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 10px;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.82rem; font-weight: 600;
+            color: #c7d2fe;
+        }
+        .user-badge .role-tag {
+            background: #6366f1;
+            color: #fff;
+            padding: 0.1rem 0.45rem;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .user-badge .role-tag.admin { background: #f59e0b; color: #000; }
+
+        /* Admin panel */
+        .admin-panel-overlay {
+            position: fixed; inset: 0;
+            background: rgba(7,13,28,0.88);
+            backdrop-filter: blur(12px);
+            z-index: 8000;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+        .admin-panel-overlay.hidden { display: none; }
+        .admin-panel-box {
+            background: #1e293b;
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%; max-width: 700px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            animation: fadeInUp 0.3s ease;
+        }
+        .admin-panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .admin-panel-title {
+            font-size: 1.2rem; font-weight: 800; color: #fbbf24;
+            display: flex; align-items: center; gap: 0.65rem;
+        }
+        .btn-close-panel {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8; width: 36px; height: 36px;
+            border-radius: 8px; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-close-panel:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+
+        .admin-user-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(15,23,42,0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        .admin-user-info { display: flex; flex-direction: column; }
+        .admin-user-name { font-weight: 700; font-size: 0.88rem; }
+        .admin-user-email { font-size: 0.76rem; color: #94a3b8; }
+        .admin-user-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .btn-promote {
+            background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3);
+            color: #fbbf24; padding: 0.3rem 0.65rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-promote:hover { background: #f59e0b; color: #000; }
+        .btn-demote {
+            background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+            color: #818cf8; padding: 0.3rem 0.65rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-demote:hover { background: #6366f1; color: #fff; }
+        .btn-del-user {
+            background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25);
+            color: #f87171; padding: 0.3rem 0.65rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-del-user:hover { background: #ef4444; color: #fff; }
+        .admin-section-title {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; color: #64748b;
+            margin: 1.25rem 0 0.75rem;
+        }
     </style>
 </head>
 
@@ -1436,6 +1615,20 @@
                 </button>
                 <button class="btn-secondary" id="demoDataBtn">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> Load Sample Data
+                </button>
+                <!-- Admin Panel Button (shown only to admins) -->
+                <button class="btn-secondary" id="adminPanelBtn" style="display:none; border-color: rgba(245,158,11,0.4); color: #fbbf24;">
+                    <i class="fa-solid fa-shield-halved"></i> Admin Panel
+                </button>
+                <!-- User Badge (shown when logged in) -->
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span id="userBadgeName">User</span>
+                    <span class="role-tag" id="userBadgeRole">user</span>
+                </div>
+                <!-- Login / Logout Button -->
+                <button class="btn-secondary" id="authBtn" onclick="handleAuthBtn()">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
                 </button>
             </div>
         </header>
@@ -1687,6 +1880,14 @@
                         <span>Reserve a Seat</span>
                         <i class="fa-solid fa-pen-to-square"></i>
                     </div>
+                    <!-- Not logged in notice -->
+                    <div id="loginNotice" style="text-align:center; padding: 1.5rem 0.5rem; display:none;">
+                        <i class="fa-solid fa-lock" style="font-size:2rem; color:#6366f1; margin-bottom:0.75rem; display:block;"></i>
+                        <p style="color:#94a3b8; font-size:0.875rem; margin-bottom:1rem;">Sign in to book a desk</p>
+                        <button class="btn-submit" onclick="openAuthModal()" style="width:auto; padding: 0.65rem 1.5rem;">
+                            <i class="fa-solid fa-right-to-bracket"></i> Sign In / Register
+                        </button>
+                    </div>
                     <form id="bookingForm">
                         <div class="form-group">
                             <label for="bookingDate">Reservation Date</label>
@@ -1705,22 +1906,6 @@
                                     <option value="EU">🌤️ EU Shift (1:00 PM - 10:00 PM)</option>
                                     <option value="NIGHT">🌙 Night Shift (10:00 PM - 7:00 AM)</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="userName">Employee Name</label>
-                            <div class="input-with-icon">
-                                <i class="fa-solid fa-user"></i>
-                                <input type="text" id="userName" class="form-control" placeholder="e.g. John Doe"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="userEmail">Employee Email</label>
-                            <div class="input-with-icon">
-                                <i class="fa-solid fa-envelope"></i>
-                                <input type="email" id="userEmail" class="form-control"
-                                    placeholder="e.g. john@company.com">
                             </div>
                         </div>
                         <div class="form-group">
@@ -1765,7 +1950,317 @@
     <!-- Toast Notifications Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- ===================== AUTH MODAL ===================== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-box">
+            <div class="auth-logo"><i class="fa-solid fa-chair"></i></div>
+            <div class="auth-title">Workspace Booking</div>
+            <div class="auth-subtitle">Sign in to reserve your desk</div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+            </div>
+
+            <div class="auth-error" id="authError"></div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Your password">
+                    </div>
+                </div>
+                <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                </button>
+                <p style="text-align:center; margin-top:1rem; font-size:0.78rem; color:#64748b;">
+                    Default admin: <strong style="color:#fbbf24;">admin@office.com</strong> / <strong style="color:#fbbf24;">Admin@123</strong>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" style="display:none;">
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regName" class="form-control" placeholder="John Doe">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" class="form-control" placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password <span style="color:#64748b; font-weight:400;">(min 6 chars)</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Min 6 characters">
+                    </div>
+                </div>
+                <button class="btn-submit" id="registerBtn" onclick="doRegister()">
+                    <i class="fa-solid fa-user-plus"></i> Create Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== ADMIN PANEL ===================== -->
+    <div class="admin-panel-overlay hidden" id="adminPanelOverlay">
+        <div class="admin-panel-box">
+            <div class="admin-panel-header">
+                <div class="admin-panel-title"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
+                <button class="btn-close-panel" onclick="closeAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="admin-section-title"><i class="fa-solid fa-users"></i> User Management</div>
+            <div id="adminUserList"><div style="color:#64748b; text-align:center; padding:1.5rem;">Loading users...</div></div>
+        </div>
+    </div>
+
     <script>
+        // ===================== AUTH STATE =====================
+        let currentUser = null; // { user_id, full_name, email, role }
+        let authToken = null;
+
+        function loadAuthFromStorage() {
+            try {
+                const stored = localStorage.getItem('seat_booking_auth');
+                if (stored) {
+                    const { token, user } = JSON.parse(stored);
+                    authToken = token;
+                    currentUser = user;
+                }
+            } catch (e) { clearAuth(); }
+        }
+
+        function saveAuth(token, user) {
+            authToken = token;
+            currentUser = user;
+            localStorage.setItem('seat_booking_auth', JSON.stringify({ token, user }));
+        }
+
+        function clearAuth() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('seat_booking_auth');
+        }
+
+        function getAuthHeaders() {
+            return authToken ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }
+                             : { 'Content-Type': 'application/json' };
+        }
+
+        function updateAuthUI() {
+            const isLoggedIn = !!currentUser;
+            const isAdmin = currentUser && currentUser.role === 'admin';
+
+            document.getElementById('userBadge').style.display = isLoggedIn ? 'flex' : 'none';
+            document.getElementById('userBadgeName').textContent = isLoggedIn ? currentUser.full_name : '';
+            const roleTag = document.getElementById('userBadgeRole');
+            roleTag.textContent = isLoggedIn ? currentUser.role : '';
+            roleTag.className = 'role-tag' + (isAdmin ? ' admin' : '');
+
+            document.getElementById('authBtn').innerHTML = isLoggedIn
+                ? '<i class="fa-solid fa-right-from-bracket"></i> Sign Out'
+                : '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+
+            document.getElementById('adminPanelBtn').style.display = isAdmin ? 'flex' : 'none';
+
+            // Show/hide booking form vs login notice
+            document.getElementById('bookingForm').style.display = isLoggedIn ? 'block' : 'none';
+            document.getElementById('loginNotice').style.display = isLoggedIn ? 'none' : 'block';
+        }
+
+        function handleAuthBtn() {
+            if (currentUser) {
+                clearAuth();
+                updateAuthUI();
+                showToast('Signed out successfully.', 'success');
+            } else {
+                openAuthModal();
+            }
+        }
+
+        function openAuthModal() {
+            document.getElementById('authOverlay').classList.remove('hidden');
+            document.getElementById('authError').classList.remove('show');
+            document.getElementById('authError').textContent = '';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authOverlay').classList.add('hidden');
+        }
+
+        function switchAuthTab(tab) {
+            document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('authError').classList.remove('show');
+        }
+
+        function showAuthError(msg) {
+            const el = document.getElementById('authError');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) return showAuthError('Please enter email and password.');
+
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) { showAuthError(data.error || 'Login failed.'); return; }
+
+                saveAuth(data.token, data.user);
+                closeAuthModal();
+                updateAuthUI();
+                showToast(`Welcome back, ${data.user.full_name}! 👋`, 'success');
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } catch (e) {
+                showAuthError('Network error. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+            }
+        }
+
+        async function doRegister() {
+            const full_name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            if (!full_name || !email || !password) return showAuthError('All fields are required.');
+
+            const btn = document.getElementById('registerBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account...';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name, email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) { showAuthError(data.error || 'Registration failed.'); return; }
+
+                saveAuth(data.token, data.user);
+                closeAuthModal();
+                updateAuthUI();
+                showToast(`Account created! Welcome, ${data.user.full_name}! 🎉`, 'success');
+            } catch (e) {
+                showAuthError('Network error. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create Account';
+            }
+        }
+
+        // Allow Enter key in auth forms
+        document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+        document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+        document.getElementById('regPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+
+        // ===================== ADMIN PANEL =====================
+        async function openAdminPanel() {
+            document.getElementById('adminPanelOverlay').classList.remove('hidden');
+            await loadAdminUsers();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanelOverlay').classList.add('hidden');
+        }
+
+        async function loadAdminUsers() {
+            const list = document.getElementById('adminUserList');
+            try {
+                const res = await fetch('/api/admin/users', { headers: getAuthHeaders() });
+                if (!res.ok) throw new Error('Failed to load users');
+                const data = await res.json();
+                list.innerHTML = '';
+
+                if (!data.users || data.users.length === 0) {
+                    list.innerHTML = '<div style="color:#64748b; text-align:center; padding:1rem;">No users found.</div>';
+                    return;
+                }
+
+                data.users.forEach(u => {
+                    const isMe = u.user_id === currentUser.user_id;
+                    const isAdmin = u.role === 'admin';
+                    const div = document.createElement('div');
+                    div.className = 'admin-user-row';
+                    div.innerHTML = `
+                        <div class="admin-user-info">
+                            <div class="admin-user-name">
+                                ${escapeHtml(u.full_name)}
+                                <span class="role-tag ${isAdmin ? 'admin' : ''}" style="margin-left:0.4rem; display:inline-block; background:${isAdmin ? '#f59e0b' : '#6366f1'}; color:${isAdmin ? '#000' : '#fff'}; padding:0.1rem 0.45rem; border-radius:5px; font-size:0.7rem; font-weight:700;">${u.role.toUpperCase()}</span>
+                                ${isMe ? '<span style="color:#64748b; font-size:0.73rem;"> (you)</span>' : ''}
+                            </div>
+                            <div class="admin-user-email">${escapeHtml(u.email)}</div>
+                        </div>
+                        <div class="admin-user-actions">
+                            ${!isMe && !isAdmin ? `<button class="btn-promote" onclick="changeUserRole(${u.user_id}, 'admin')"><i class="fa-solid fa-shield-halved"></i> Make Admin</button>` : ''}
+                            ${!isMe && isAdmin ? `<button class="btn-demote" onclick="changeUserRole(${u.user_id}, 'user')"><i class="fa-solid fa-user"></i> Make User</button>` : ''}
+                            ${!isMe ? `<button class="btn-del-user" onclick="deleteUser(${u.user_id})"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            } catch (e) {
+                list.innerHTML = '<div style="color:#f87171; text-align:center; padding:1rem;">Failed to load users.</div>';
+            }
+        }
+
+        async function changeUserRole(userId, role) {
+            const res = await fetch(`/api/admin/users/${userId}/role`, {
+                method: 'PATCH',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ role })
+            });
+            const data = await res.json();
+            if (!res.ok) { showToast(data.error || 'Failed to update role.', 'error'); return; }
+            showToast(`Role updated to ${role}!`, 'success');
+            await loadAdminUsers();
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Delete this user? Their bookings will remain.')) return;
+            const res = await fetch(`/api/admin/users/${userId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            });
+            const data = await res.json();
+            if (!res.ok) { showToast(data.error || 'Failed to delete user.', 'error'); return; }
+            showToast('User deleted.', 'success');
+            await loadAdminUsers();
+        }
+
+        // ===================== MAIN APP =====================
         const TOTAL_DESKS = 4;
         const SEATS_PER_SIDE = 3;
         const MAX_ADVANCE_DAYS = 30;
@@ -2082,12 +2577,9 @@
 
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nameInput = document.getElementById('userName');
-            const emailInput = document.getElementById('userEmail');
-            const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
-            const date = topDateInput.value;
+            if (!currentUser) { openAuthModal(); return; }
 
+            const date = topDateInput.value;
             if (!selectedSeatId) {
                 showToast('Please select an available chair from the floor plan.', 'error');
                 return;
@@ -2096,11 +2588,9 @@
             try {
                 const response = await fetch('/api/bookings', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify({
                         seat_id: selectedSeatId,
-                        full_name: name,
-                        email: email,
                         booking_date: date,
                         shift_code: selectedShift
                     })
@@ -2108,18 +2598,22 @@
 
                 const result = await response.json();
 
+                if (response.status === 401 || response.status === 403) {
+                    clearAuth(); updateAuthUI();
+                    showToast('Session expired. Please sign in again.', 'error');
+                    openAuthModal(); return;
+                }
+
                 if (!response.ok) {
                     showToast(result.error || 'Failed to confirm booking.', 'error');
                     return;
                 }
 
                 const shiftInfo = SHIFT_META[selectedShift];
-                showToast(`Reserved ${selectedSeatId} for ${name} (${shiftInfo.name}) on ${date}!`, 'success');
+                showToast(`Reserved ${selectedSeatId} for ${currentUser.full_name} (${shiftInfo.name}) on ${date}!`, 'success');
 
                 selectedSeatId = null;
                 document.getElementById('selectedSeatDisplay').value = 'None';
-                nameInput.value = '';
-                emailInput.value = '';
                 fetchSeatsAndRender();
             } catch (err) {
                 showToast('Network error posting booking', 'error');
@@ -2127,17 +2621,23 @@
         });
 
         async function cancelBooking(bookingId) {
+            if (!currentUser) { openAuthModal(); return; }
             try {
                 const response = await fetch(`/api/bookings/${bookingId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
                 });
 
+                if (response.status === 403) {
+                    showToast('You can only cancel your own bookings.', 'error');
+                    return;
+                }
                 if (!response.ok) {
                     showToast('Failed to cancel booking', 'error');
                     return;
                 }
 
-                showToast(`Cancelled booking successfully`, 'success');
+                showToast('Booking cancelled successfully!', 'success');
                 fetchSeatsAndRender();
             } catch (err) {
                 showToast('Error communicating with server', 'error');
@@ -2280,7 +2780,18 @@
                 .replace(/'/g, "&#039;");
         }
 
+        // Admin Panel button
+        document.getElementById('adminPanelBtn').addEventListener('click', openAdminPanel);
+
         // Initialize Page
+        loadAuthFromStorage();
+        updateAuthUI();
+
+        // If not logged in, show auth modal on first load
+        if (!currentUser) {
+            setTimeout(() => openAuthModal(), 300);
+        }
+
         build30DayCarousel();
         selectShift('APAC');
         updateDateUI(minDateStr);
